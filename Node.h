@@ -1,16 +1,9 @@
-#pragma once
-class Node {
-public:
-    Node();
-    Node(const Node& orig);
-    virtual ~Node();
-    bool hasNext();
-    Node* getNext();
-    void setNext(Node* newNext);
-    int getValue();
-    void setValue(int val);
-private:
-    Node* next;
-    int value;
-};
+#include <iostream>
+#include <list>
 
+using namespace std;
+
+class Node {  // This class represents each node in the behaviour tree.
+public:
+	virtual bool run() = 0;
+};
