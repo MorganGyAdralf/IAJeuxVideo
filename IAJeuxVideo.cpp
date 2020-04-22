@@ -2,6 +2,7 @@
 //
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "GameWorld.h"
 
 int main()
 {
@@ -22,6 +23,8 @@ int main()
         window.draw(shape);
         window.display();
     }
+
+    GameWorld world();
 
     return 0;
 }
