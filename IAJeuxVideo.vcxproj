@@ -159,13 +159,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CompositeNode.cpp" />
     <ClCompile Include="GameWorld.cpp" />
     <ClCompile Include="IAJeuxVideo.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CompositeNode.h" />
     <ClInclude Include="GameWorld.h" />
+    <ClInclude Include="Node.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Selector.h" />
+    <ClInclude Include="Sequence.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
