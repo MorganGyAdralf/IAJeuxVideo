@@ -166,6 +166,8 @@
   <ItemGroup>
     <ClInclude Include="CompositeNode.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="Selector.h" />
+    <ClInclude Include="Sequence.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
