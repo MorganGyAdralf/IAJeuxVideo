@@ -1,10 +1,12 @@
 #pragma once
+#include "Sequence.h"
+#include "Selector.h"
+#include "SpecializedNodes.h"
+
 class Tree
 {
 public:
-	Tree();
+	Tree(Player* player);
 	~Tree() = default;
-
-	void buildTree(Player& player);
 };
 

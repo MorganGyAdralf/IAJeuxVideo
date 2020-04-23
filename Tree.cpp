@@ -1,10 +1,7 @@
 #include "Tree.h"
-#include "Sequence.h"
-#include "Selector.h"
-#include "SpecializedNodes.h"
 
 
-void Tree::buildTree(Player* player) {
+Tree::Tree(Player* player) {
 
 	Sequence *root = new Sequence;
 	Sequence* moveToTarget = new Sequence;
