@@ -165,7 +165,7 @@
     <ClCompile Include="GraphicGridWorld.cpp" />
     <ClCompile Include="IAJeuxVideo.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="SpecializedNodes.cpp" />
+    <ClCompile Include="Tree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CompositeNode.h" />
@@ -175,6 +175,7 @@
     <ClInclude Include="Selector.h" />
     <ClInclude Include="Sequence.h" />
     <ClInclude Include="SpecializedNodes.h" />
+    <ClInclude Include="Tree.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicAgent.h" />

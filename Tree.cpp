@@ -1,6 +1,5 @@
 #include "Tree.h"
 
-
 Tree::Tree(Player* player) {
 
 	Sequence *root = new Sequence;

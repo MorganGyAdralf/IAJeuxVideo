@@ -3,8 +3,7 @@
 #include "Selector.h"
 #include "SpecializedNodes.h"
 
-class Tree
-{
+class Tree {
 public:
 	Tree(Player* player);
 	~Tree() = default;
