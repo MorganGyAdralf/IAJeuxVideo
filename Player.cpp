@@ -37,5 +37,42 @@ bool Player::findClosestTarget() {
 void Player::turnTowardClosestTarget() {
 	int xDist = playerDestination.first - playerPosition.first;
 	int yDist = playerDestination.second - playerPosition.second;
+	if (abs(xDist) >= abs(yDist)) {
+		if (xDist > 0)
+			playerLookingDirection = Direction::East;
+		else
+			playerLookingDirection = Direction::West;
+	}
+	else {
+		if (yDist > 0)
+			playerLookingDirection = Direction::North;
+		else
+			playerLookingDirection = Direction::South;
+	}
+}
 
+pair<bool, SquareType> Player::canAdvance() const {
+	return currentWorld->playerCanAdvance(playerPosition, playerLookingDirection);
+}
+
+void Player::advance() {
+	playerPosition = currentWorld->advancePlayer(playerPosition, playerLookingDirection);
+}
+
+bool Player::turnForWall() {
+	if (playerLookingDirection == Direction::East || playerLookingDirection == Direction::West) {
+		if (currentWorld->playerCanAdvance(playerPosition, Direction::North).first)
+			playerLookingDirection = Direction::North;
+		else if (currentWorld->playerCanAdvance(playerPosition, Direction::South).first)
+			playerLookingDirection = Direction::South;
+		else return false;
+	}
+	else {
+		if (currentWorld->playerCanAdvance(playerPosition, Direction::East).first)
+			playerLookingDirection = Direction::East;
+		else if (currentWorld->playerCanAdvance(playerPosition, Direction::West).first)
+			playerLookingDirection = Direction::West;
+		else return false;
+	}
+	return true;
 }

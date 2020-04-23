@@ -159,7 +159,7 @@ pair<int, int> GameWorld::findclosestTarget(pair<int, int> playerPosition) {
 	for (int x = 0; x < WIDTH; ++x) {
 		for (int y = 0; y < HEIGHT; ++y) {
 			if (gridWorld[x][y] == SquareType::Target) {
-				currentDist = pow(x - playerPosition.first, 2) + pow(y - playerPosition.second, 2);
+				currentDist = (int)(pow(x - playerPosition.first, 2) + pow(y - playerPosition.second, 2));
 				if (currentDist < minDist) {
 					minDist = currentDist;
 					closestTarget.first = x;

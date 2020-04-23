@@ -43,7 +43,8 @@ private:
 public:
 	AdvanceWhileNotBlockedTask(Player* _playerAI) : playerAI(_playerAI) {}
 	virtual bool run() override {
-		//TODO
+		while(playerAI->canAdvance().first)
+			playerAI->advance();
 		return true;
 	}
 };
@@ -55,8 +56,7 @@ private:
 public:
 	BlockedByTargetTask(Player* _playerAI) : playerAI(_playerAI) {}
 	virtual bool run() override {
-		//TODO
-		return true;
+		return (playerAI->canAdvance().second == SquareType::Target);
 	}
 };
 
@@ -67,8 +67,7 @@ private:
 public:
 	ChooseDirectionInFrontOfWallTask(Player* _playerAI) : playerAI(_playerAI) {}
 	virtual bool run() override {
-		//TODO
-		return true;
+		return playerAI->turnForWall();
 	}
 };
 
@@ -79,7 +78,7 @@ private:
 public:
 	AdvanceOnlyOneSquareTask(Player* _playerAI) : playerAI(_playerAI) {}
 	virtual bool run() override {
-		//TODO
+		playerAI->advance();
 		return true;
 	}
 };
