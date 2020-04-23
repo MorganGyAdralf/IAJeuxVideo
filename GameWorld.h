@@ -3,6 +3,7 @@
 #include <tuple>
 #include <assert.h>
 #include <iostream>
+#include <math.h>
 
 using namespace std;
 
@@ -14,6 +15,7 @@ enum class SquareType {
 	Wall,
 	Target,
 	Trap,
+	Border,
 	Player
 };
 
@@ -42,6 +44,7 @@ public:
 	pair<int, int> computeNewPosition(int x, int y, Direction forward) const;
 	void attackTarget(pair<int, int> playerPosition, Direction forward);
 	bool gameOngoing();
+	pair<int, int> findclosestTarget(pair<int, int> playerPosition);
 
 private:
 	int targetsDestroyed = 0;
