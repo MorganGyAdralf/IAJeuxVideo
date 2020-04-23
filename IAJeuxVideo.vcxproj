@@ -163,7 +163,6 @@
     <ClCompile Include="GameWorld.cpp" />
     <ClCompile Include="IAJeuxVideo.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="SpecializedNodes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CompositeNode.h" />

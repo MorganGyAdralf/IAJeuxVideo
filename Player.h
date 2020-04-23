@@ -18,6 +18,9 @@ public:
 	bool attackAMeleeTarget() const;
 	bool findClosestTarget();
 	void turnTowardClosestTarget();
+	pair<bool, SquareType> canAdvance() const;
+	void advance();
+	bool turnForWall();
 
 private:
 	GameWorld* currentWorld;
