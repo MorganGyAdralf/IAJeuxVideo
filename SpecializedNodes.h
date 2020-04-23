@@ -1,9 +1,12 @@
 #pragma once
 #include "Node.h"
-#include "CompositeNode.h"
-#include "Selector.h"
-#include "Sequence.h"
+#include "Player.h"
 
-class SpecializedNodes {
+class AttackTargetTask : public Node {
+private:
+	Player* playerAI;
+
+public:
+	AttackTargetTask(Player* _playerAI) : playerAI(_playerAI) {}
 
 };
