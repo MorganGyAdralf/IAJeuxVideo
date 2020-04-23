@@ -161,6 +161,8 @@
   <ItemGroup>
     <ClCompile Include="CompositeNode.cpp" />
     <ClCompile Include="GameWorld.cpp" />
+    <ClCompile Include="GraphicAgent.cpp" />
+    <ClCompile Include="GraphicGridWorld.cpp" />
     <ClCompile Include="IAJeuxVideo.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SpecializedNodes.cpp" />
@@ -173,6 +175,10 @@
     <ClInclude Include="Selector.h" />
     <ClInclude Include="Sequence.h" />
     <ClInclude Include="SpecializedNodes.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GraphicAgent.h" />
+    <ClInclude Include="GraphicGridWorld.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
