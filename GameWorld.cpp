@@ -85,9 +85,11 @@ pair<int, int> GameWorld::spawnPlayer() {
 
 pair<bool, SquareType> GameWorld::playerCanAdvance(pair<int, int> playerPosition, Direction forward) const {
 	pair<int, int> newPosition = computeNewPosition(playerPosition.first, playerPosition.second, forward);
-	bool canMove = newPosition.first >= 0 && newPosition.second >= 0 && newPosition.first < WIDTH && newPosition.second < HEIGHT &&
-		(gridWorld[newPosition.first][newPosition.second] == SquareType::Empty || gridWorld[newPosition.first][newPosition.second] == SquareType::Trap);
-	return make_pair(canMove, gridWorld[newPosition.first][newPosition.second]);
+	if(newPosition.first >= 0 && newPosition.second >= 0 && newPosition.first < WIDTH && newPosition.second < HEIGHT)
+		return make_pair(gridWorld[newPosition.first][newPosition.second] == SquareType::Empty || gridWorld[newPosition.first][newPosition.second] == SquareType::Trap, 
+			gridWorld[newPosition.first][newPosition.second]);
+	else
+		return make_pair(false, SquareType::Border);
 }
 
 pair<int, int> GameWorld::advancePlayer(pair<int, int> playerPosition, Direction forward) {
@@ -103,6 +105,7 @@ pair<int, int> GameWorld::advancePlayer(pair<int, int> playerPosition, Direction
 	return newPosition;
 }
 
+// On considère un tableau déployé comme un plan2D : les x augmente vers l'est et les y vers le nord
 pair<int, int> GameWorld::computeNewPosition(int x, int y, Direction forward) const {
 	int xRet = x, yRet = y;
 	switch (forward) {
@@ -127,9 +130,14 @@ pair<int, int> GameWorld::computeNewPosition(int x, int y, Direction forward) co
 
 void GameWorld::attackTarget(pair<int, int> playerPosition, Direction forward) {
 	pair<int, int> targetPosition = computeNewPosition(playerPosition.first, playerPosition.second, forward);
-	gridWorld[targetPosition.first][targetPosition.second] = SquareType::Empty;
-	++targetsDestroyed;
-	cout << "GAMELOG:: One more target destroyed!" << endl;
+	if (gridWorld[targetPosition.first][targetPosition.second] == SquareType::Target) {
+		gridWorld[targetPosition.first][targetPosition.second] = SquareType::Empty;
+		++targetsDestroyed;
+		cout << "GAMELOG:: One more target destroyed!" << endl;
+	}
+	else {
+		cout << "GAMELOG:: You cannot attack there!" << endl;
+	}
 }
 
 bool GameWorld::gameOngoing() {
@@ -142,4 +150,23 @@ bool GameWorld::gameOngoing() {
 		gameIsOn = false;
 	}
 	return gameIsOn;
+}
+
+pair<int, int> GameWorld::findclosestTarget(pair<int, int> playerPosition) {
+	pair<int, int> closestTarget = playerPosition;
+	int minDist = 10000000;
+	int currentDist;
+	for (int x = 0; x < WIDTH; ++x) {
+		for (int y = 0; y < HEIGHT; ++y) {
+			if (gridWorld[x][y] == SquareType::Target) {
+				currentDist = pow(x - playerPosition.first, 2) + pow(y - playerPosition.second, 2);
+				if (currentDist < minDist) {
+					minDist = currentDist;
+					closestTarget.first = x;
+					closestTarget.second = y;
+				}
+			}
+		}
+	}
+	return closestTarget;
 }
