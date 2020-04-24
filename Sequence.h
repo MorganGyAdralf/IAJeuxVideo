@@ -2,7 +2,13 @@
 #include "CompositeNode.h"
 
 class Sequence : public CompositeNode {
+private:
+
 public:
+	Sequence() {
+		nodeName = "Sequence";
+		nodeType = NodeType::Sequence;
+	}
 	virtual bool run() override {
 		for (Node* child : getChildren()) {  // The generic Sequence implementation.
 			if (!child->run())  // If one child fails, then enter operation run() fails.  Success only results if all children succeed.

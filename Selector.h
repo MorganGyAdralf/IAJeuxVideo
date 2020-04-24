@@ -3,6 +3,10 @@
 
 class Selector : public CompositeNode {
 public:
+	Selector() {
+		nodeName = "Selector";
+		nodeType = NodeType::Selector;
+	}
 	virtual bool run() override {
 		for (Node* child : getChildren()) {  // The generic Selector implementation
 			if (child->run())  // If one child succeeds, the entire operation run() succeeds.  Failure only results if all children fail.
