@@ -12,6 +12,7 @@ public:
 		nodeType = NodeType::SpecializedNode;
 	}
 	virtual bool run() override {
+		_getch();
 		return playerAI->attackAMeleeTarget();
 	}
 };
@@ -26,6 +27,7 @@ public:
 		nodeType = NodeType::SpecializedNode;
 	}
 	virtual bool run() override {
+		_getch();
 		return playerAI->findClosestTarget();
 	}
 };
@@ -40,6 +42,7 @@ public:
 		nodeType = NodeType::SpecializedNode;
 	}
 	virtual bool run() override {
+		_getch();
 		playerAI->turnTowardClosestTarget();
 		return true;
 	}
@@ -55,8 +58,11 @@ public:
 		nodeType = NodeType::SpecializedNode;
 	}
 	virtual bool run() override {
-		while(playerAI->canAdvance().first && playerAI->hasNotAttainedObjective())
+		_getch();
+		while (playerAI->canAdvance().first && playerAI->hasNotAttainedObjective()) {
+			_getch();
 			playerAI->advance();
+		}
 		return true;
 	}
 };
@@ -71,7 +77,23 @@ public:
 		nodeType = NodeType::SpecializedNode;
 	}
 	virtual bool run() override {
+		_getch();
 		return (playerAI->canAdvance().second == SquareType::Target);
+	}
+};
+
+class AdvcanceMaxAttainedTask : public Node {
+private:
+	Player* playerAI;
+
+public:
+	AdvcanceMaxAttainedTask(Player* _playerAI) : playerAI(_playerAI) {
+		nodeName = "Task : AdvanceAttained?";
+		nodeType = NodeType::SpecializedNode;
+	}
+	virtual bool run() override {
+		_getch();
+		return (!playerAI->hasNotAttainedObjective());
 	}
 };
 
@@ -85,6 +107,7 @@ public:
 		nodeType = NodeType::SpecializedNode;
 	}
 	virtual bool run() override {
+		_getch();
 		return playerAI->turnForWall();
 	}
 };
@@ -99,6 +122,7 @@ public:
 		nodeType = NodeType::SpecializedNode;
 	}
 	virtual bool run() override {
+		_getch();
 		playerAI->advance();
 		return true;
 	}

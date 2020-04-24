@@ -14,8 +14,8 @@ Tree::Tree(Player* player) : treePlayer(player) {
 	TurnTowardTargetTask* turnTowardTargetTask = new TurnTowardTargetTask(player);
 	AdvanceWhileNotBlockedTask* advanceWhileNotBlockedTask = new AdvanceWhileNotBlockedTask(player);
 
-
 	BlockedByTargetTask* blockedByTargetTask = new BlockedByTargetTask(player);
+	AdvcanceMaxAttainedTask* advcanceMaxAttainedTask = new AdvcanceMaxAttainedTask(player);
 	ChooseDirectionInFrontOfWallTask* chooseDirection = new ChooseDirectionInFrontOfWallTask(player);
 	AdvanceOnlyOneSquareTask* advanceOnlyOneSquareTask = new AdvanceOnlyOneSquareTask(player);
 
@@ -30,6 +30,7 @@ Tree::Tree(Player* player) : treePlayer(player) {
 	moveToTarget->addChild(blocked);
 
 	blocked->addChild(blockedByTargetTask);
+	blocked->addChild(advcanceMaxAttainedTask);
 	blocked->addChild(dodgeWall);
 
 	dodgeWall->addChild(chooseDirection);

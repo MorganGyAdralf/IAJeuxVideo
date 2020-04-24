@@ -42,9 +42,9 @@ private:
 	int height;
 	int targetsDestroyed = 0;
 	int nbOfPlayers = 0;
-	const int nbOfWalls = 30;
+	const int nbOfWalls = 10;
 	const int nbOfTargets = 3;
-	const int nbOfTraps = 5;
+	const int nbOfTraps = 0;
 	vector<vector<SquareType>> gridWorld;
 	GraphicGridWorld graphicWorld;
 	bool gameIsOn = true;

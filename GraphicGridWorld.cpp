@@ -15,7 +15,8 @@ GraphicGridWorld::GraphicGridWorld(int cols, int rows, sf::RenderWindow& window)
 		for (int j = 0; j < m_cols; j++) {
 			Square rect;
 			rect.square.setSize(sf::Vector2f(m_squarewidth, m_squareheight));
-			rect.square.setPosition(sf::Vector2f((m_squarewidth + 1.0f) * j + 5.0f, (m_squareheight + 1.0f) * i + 5.0f));
+			rect.square.setPosition(sf::Vector2f((m_squarewidth + 1.0f) * j + 5.0f,
+				window.getSize().y - 5.0f - (m_squareheight + 1.0f) * (i + 1)));
 			rect.color = BLACK;
 			rect.square.setFillColor(sf::Color::Black);
 			m_gridWorld.push_back(rect);
