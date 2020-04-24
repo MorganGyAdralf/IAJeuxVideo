@@ -1,8 +1,8 @@
 #include "Tree.h"
 
-Tree::Tree(Player* player) {
+Tree::Tree(Player* player) : treePlayer(player) {
 
-	Sequence *root = new Sequence;
+	root = new Sequence;
 	Sequence* moveToTarget = new Sequence;
 	Sequence* dodgeWall = new Sequence;
 
@@ -34,5 +34,11 @@ Tree::Tree(Player* player) {
 
 	dodgeWall->addChild(chooseDirection);
 	dodgeWall->addChild(advanceOnlyOneSquareTask);
+}
 
+void Tree::Run() {
+	while (treePlayer->gameIsOn()) {
+		cout << "-------- nouvelle passe ------------" << endl;
+		root->run();
+	}
 }

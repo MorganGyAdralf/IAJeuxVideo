@@ -2,7 +2,6 @@
 #include <assert.h> 
 #include "GameWorld.h"
 
-
 class Player {
 public:
 	Player(GameWorld* world);
@@ -12,15 +11,14 @@ public:
 	void setDirection(Direction newDirection) {
 		playerLookingDirection = newDirection;
 	}
-	GameWorld* getWorld() const {
-		return currentWorld;
-	}
-	bool attackAMeleeTarget() const;
+	bool attackAMeleeTarget();
 	bool findClosestTarget();
 	void turnTowardClosestTarget();
 	pair<bool, SquareType> canAdvance() const;
 	void advance();
 	bool turnForWall();
+	bool hasNotAttainedObjective();
+	bool gameIsOn();
 
 private:
 	GameWorld* currentWorld;

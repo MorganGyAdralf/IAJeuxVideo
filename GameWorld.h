@@ -4,20 +4,10 @@
 #include <assert.h>
 #include <iostream>
 #include <math.h>
+#include "GraphicGridWorld.h"
+#include "GraphicAgent.h"
 
 using namespace std;
-
-constexpr auto WIDTH = 15;
-constexpr auto HEIGHT = 10;
-
-enum class SquareType {
-	Empty, 
-	Wall,
-	Target,
-	Trap,
-	Border,
-	Player
-};
 
 enum class Direction {
 	North,
@@ -28,13 +18,13 @@ enum class Direction {
 
 class GameWorld {
 public:
-	GameWorld();
+	GameWorld(int w, int h);
 	~GameWorld() {}
-	const int getWorldWidth() const {
-		return WIDTH;
+	const int getWorldwidth() const {
+		return width;
 	}
-	const int getWorldHeight() const  {
-		return HEIGHT;
+	const int getWorldheight() const  {
+		return height;
 	}
 	SquareType getWorldSquare(int x, int y) const;
 	void setWorldSquare(int x, int y, SquareType newType);
@@ -44,15 +34,19 @@ public:
 	pair<int, int> computeNewPosition(int x, int y, Direction forward) const;
 	void attackTarget(pair<int, int> playerPosition, Direction forward);
 	bool gameOngoing();
-	pair<int, int> findclosestTarget(pair<int, int> playerPosition);
+	pair<int, int> findclosestTarget(pair<int, int> playerPosition) const;
+	void updateGraphicalWorld();
 
 private:
+	int width;
+	int height;
 	int targetsDestroyed = 0;
 	int nbOfPlayers = 0;
-	const int nbOfWalls = 15;
+	const int nbOfWalls = 30;
 	const int nbOfTargets = 3;
 	const int nbOfTraps = 5;
-	SquareType gridWorld[WIDTH][HEIGHT];
+	vector<vector<SquareType>> gridWorld;
+	GraphicGridWorld graphicWorld;
 	bool gameIsOn = true;
 };
 

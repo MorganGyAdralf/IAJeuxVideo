@@ -7,5 +7,10 @@ class Tree {
 public:
 	Tree(Player* player);
 	~Tree() = default;
+	void Run();
+
+private:
+	Sequence* root;
+	Player* treePlayer;
 };
 

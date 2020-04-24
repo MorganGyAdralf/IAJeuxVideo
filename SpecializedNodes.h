@@ -43,7 +43,7 @@ private:
 public:
 	AdvanceWhileNotBlockedTask(Player* _playerAI) : playerAI(_playerAI) {}
 	virtual bool run() override {
-		while(playerAI->canAdvance().first)
+		while(playerAI->canAdvance().first && playerAI->hasNotAttainedObjective())
 			playerAI->advance();
 		return true;
 	}

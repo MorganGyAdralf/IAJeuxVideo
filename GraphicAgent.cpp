@@ -9,7 +9,7 @@ GraphicAgent::GraphicAgent(GraphicGridWorld world) {
 	this->m_agent = sf::CircleShape(m_squareSize / 2, 3);
 	this->m_agent.setFillColor(sf::Color::Green);
 	this->m_agent.setPosition(sf::Vector2f(world.GetCasePosition(this->m_currentAgentPosition).x, world.GetCasePosition(this->m_currentAgentPosition).y + (this->m_squareSize - this->m_agent.getLocalBounds().height) / 2));
-	this->m_worldSize = world.GetWorlHeight();
+	this->m_worldSize = world.GetWorlheight();
 }
 
 void GraphicAgent::CreateAgent(sf::RenderWindow& window, GraphicGridWorld world) {

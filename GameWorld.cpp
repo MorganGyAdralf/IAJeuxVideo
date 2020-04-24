@@ -1,16 +1,21 @@
 #include "GameWorld.h"
 
+sf::RenderWindow worldWindow(sf::VideoMode(1000, 1000), "Grid World");	//A voir pour ça
 
-GameWorld::GameWorld() {
+GameWorld::GameWorld(int w, int h) : width(w), height(h) {
 	int x, y;
-	for (x = 0; x < WIDTH; x++)
-		for (y = 0; y < HEIGHT; y++)
-			gridWorld[x][y] = SquareType::Empty;
+	vector<SquareType> tmp;
+	for (x = 0; x < width; x++) {
+		tmp.clear();
+		for (y = 0; y < height; y++)
+			tmp.push_back(SquareType::Empty);
+		gridWorld.push_back(tmp);
+	}
 
 	random_device rd;
 	mt19937 gen(rd());
-	uniform_int_distribution<> disX(0, WIDTH);
-	uniform_int_distribution<> disY(0, HEIGHT);
+	uniform_int_distribution<> disX(0, width - 1);
+	uniform_int_distribution<> disY(0, height - 1);
 
 	int currentWalls = 0;
 	while (currentWalls < nbOfWalls) {
@@ -23,7 +28,7 @@ GameWorld::GameWorld() {
 	}
 
 	int currentTargets = 0;
-	while (currentTargets < nbOfWalls) {
+	while (currentTargets < nbOfTargets) {
 		x = disX(gen);
 		y = disY(gen);
 		if (gridWorld[x][y] == SquareType::Empty) {
@@ -33,7 +38,7 @@ GameWorld::GameWorld() {
 	}
 
 	int currentTraps = 0;
-	while (currentTraps < nbOfWalls) {
+	while (currentTraps < nbOfTraps) {
 		x = disX(gen);
 		y = disY(gen);
 		if (gridWorld[x][y] == SquareType::Empty) {
@@ -41,26 +46,35 @@ GameWorld::GameWorld() {
 			++currentTraps;
 		}
 	}
+
+	graphicWorld = GraphicGridWorld(width, height, worldWindow);
+	updateGraphicalWorld();
+}
+
+void GameWorld::updateGraphicalWorld() {
+	worldWindow.clear(sf::Color(125, 125, 125));
+	graphicWorld.UpdateGridWorld(worldWindow, gridWorld);
+	worldWindow.display();
 }
 
 SquareType GameWorld::getWorldSquare(int x, int y) const {
-	assert(x >= 0 && x < WIDTH);
-	assert(y >= 0 && y < HEIGHT);
+	assert(x >= 0 && x < width);
+	assert(y >= 0 && y < height);
 	if (x < 0) x = 0;
-	if (x >= WIDTH) x = WIDTH - 1;
+	if (x >= width) x = width - 1;
 	if (y < 0) y = 0;
-	if (y >= HEIGHT) y = HEIGHT - 1;
+	if (y >= height) y = height - 1;
 
 	return gridWorld[x][y];
 }
 
 void GameWorld::setWorldSquare(int x, int y, SquareType newType) {
-	assert(x >= 0 && x < WIDTH);
-	assert(y >= 0 && y < HEIGHT);
+	assert(x >= 0 && x < width);
+	assert(y >= 0 && y < height);
 	if (x < 0) x = 0;
-	if (x >= WIDTH) x = WIDTH - 1;
+	if (x >= width) x = width - 1;
 	if (y < 0) y = 0;
-	if (y >= HEIGHT) y = HEIGHT - 1;
+	if (y >= height) y = height - 1;
 
 	gridWorld[x][y] = newType;
 }
@@ -68,8 +82,8 @@ void GameWorld::setWorldSquare(int x, int y, SquareType newType) {
 pair<int, int> GameWorld::spawnPlayer() {
 	random_device rd;
 	mt19937 gen(rd());
-	uniform_int_distribution<> posX(0, WIDTH);
-	uniform_int_distribution<> posY(0, HEIGHT);
+	uniform_int_distribution<> posX(0, width - 1);
+	uniform_int_distribution<> posY(0, height - 1);
 	int x, y;
 	while (true) {
 		x = posX(gen);
@@ -80,14 +94,21 @@ pair<int, int> GameWorld::spawnPlayer() {
 		}
 	}
 	++nbOfPlayers;
+	updateGraphicalWorld();
 	return make_pair(x, y);
 }
 
 pair<bool, SquareType> GameWorld::playerCanAdvance(pair<int, int> playerPosition, Direction forward) const {
 	pair<int, int> newPosition = computeNewPosition(playerPosition.first, playerPosition.second, forward);
-	if(newPosition.first >= 0 && newPosition.second >= 0 && newPosition.first < WIDTH && newPosition.second < HEIGHT)
-		return make_pair(gridWorld[newPosition.first][newPosition.second] == SquareType::Empty || gridWorld[newPosition.first][newPosition.second] == SquareType::Trap, 
+	if (newPosition.first >= 0 && newPosition.second >= 0 && newPosition.first < width && newPosition.second < height) {
+		SquareType tmp = gridWorld[newPosition.first][newPosition.second];
+		bool tmp2 = gridWorld[newPosition.first][newPosition.second] == SquareType::Empty || gridWorld[newPosition.first][newPosition.second] == SquareType::Trap;
+
+
+		return make_pair(gridWorld[newPosition.first][newPosition.second] == SquareType::Empty || gridWorld[newPosition.first][newPosition.second] == SquareType::Trap,
 			gridWorld[newPosition.first][newPosition.second]);
+
+	}
 	else
 		return make_pair(false, SquareType::Border);
 }
@@ -101,6 +122,7 @@ pair<int, int> GameWorld::advancePlayer(pair<int, int> playerPosition, Direction
 	else {
 		gridWorld[playerPosition.first][playerPosition.second] = SquareType::Empty;
 		gridWorld[newPosition.first][newPosition.second] = SquareType::Player;
+		updateGraphicalWorld();
 	}
 	return newPosition;
 }
@@ -132,6 +154,7 @@ void GameWorld::attackTarget(pair<int, int> playerPosition, Direction forward) {
 	pair<int, int> targetPosition = computeNewPosition(playerPosition.first, playerPosition.second, forward);
 	if (gridWorld[targetPosition.first][targetPosition.second] == SquareType::Target) {
 		gridWorld[targetPosition.first][targetPosition.second] = SquareType::Empty;
+		updateGraphicalWorld();
 		++targetsDestroyed;
 		cout << "GAMELOG:: One more target destroyed!" << endl;
 	}
@@ -152,12 +175,12 @@ bool GameWorld::gameOngoing() {
 	return gameIsOn;
 }
 
-pair<int, int> GameWorld::findclosestTarget(pair<int, int> playerPosition) {
+pair<int, int> GameWorld::findclosestTarget(pair<int, int> playerPosition) const {
 	pair<int, int> closestTarget = playerPosition;
 	int minDist = 10000000;
 	int currentDist;
-	for (int x = 0; x < WIDTH; ++x) {
-		for (int y = 0; y < HEIGHT; ++y) {
+	for (int x = 0; x < width; ++x) {
+		for (int y = 0; y < height; ++y) {
 			if (gridWorld[x][y] == SquareType::Target) {
 				currentDist = (int)(pow(x - playerPosition.first, 2) + pow(y - playerPosition.second, 2));
 				if (currentDist < minDist) {
