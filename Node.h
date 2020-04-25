@@ -13,11 +13,17 @@ enum class NodeType {
 	SpecializedNode
 };
 
+enum class NodeReturnType {
+	Succes,
+	Failure, 
+	Running
+};
+
 class Node {  // This class represents each node in the behaviour tree.
 public:
 	string nodeName = "Node Basique";
 	NodeType nodeType = NodeType::Node;
-	virtual bool run() = 0;
+	virtual NodeReturnType run() = 0;
 	string getNodeName() {
 		return nodeName;
 	}

@@ -11,9 +11,13 @@ public:
 		nodeName = "Task : attack target";
 		nodeType = NodeType::SpecializedNode;
 	}
-	virtual bool run() override {
+	virtual NodeReturnType run() override {
 		_getch();
-		return playerAI->attackAMeleeTarget();
+		bool ret = playerAI->attackAMeleeTarget();
+		if (ret == true)
+			return NodeReturnType::Succes;
+		else
+			return NodeReturnType::Failure;
 	}
 };
 
@@ -26,9 +30,13 @@ public:
 		nodeName = "Task : find target";
 		nodeType = NodeType::SpecializedNode;
 	}
-	virtual bool run() override {
+	virtual NodeReturnType run() override {
 		_getch();
-		return playerAI->findClosestTarget();
+		bool ret = playerAI->findClosestTarget();
+		if (ret == true)
+			return NodeReturnType::Succes;
+		else
+			return NodeReturnType::Failure;
 	}
 };
 
@@ -41,10 +49,10 @@ public:
 		nodeName = "Task : turn toward target";
 		nodeType = NodeType::SpecializedNode;
 	}
-	virtual bool run() override {
+	virtual NodeReturnType run() override {
 		_getch();
 		playerAI->turnTowardClosestTarget();
-		return true;
+		return NodeReturnType::Succes;
 	}
 };
 
@@ -57,13 +65,13 @@ public:
 		nodeName = "Task : advance while not blocked";
 		nodeType = NodeType::SpecializedNode;
 	}
-	virtual bool run() override {
+	virtual NodeReturnType run() override {
 		_getch();
 		while (playerAI->canAdvance().first && playerAI->hasNotAttainedObjective()) {
 			_getch();
 			playerAI->advance();
 		}
-		return true;
+		return NodeReturnType::Succes;
 	}
 };
 
@@ -76,9 +84,13 @@ public:
 		nodeName = "Task : blocked by target?";
 		nodeType = NodeType::SpecializedNode;
 	}
-	virtual bool run() override {
+	virtual NodeReturnType run() override {
 		_getch();
-		return (playerAI->canAdvance().second == SquareType::Target);
+		bool ret = (playerAI->canAdvance().second == SquareType::Target);
+		if (ret == true)
+			return NodeReturnType::Succes;
+		else
+			return NodeReturnType::Failure;
 	}
 };
 
@@ -91,9 +103,13 @@ public:
 		nodeName = "Task : AdvanceAttained?";
 		nodeType = NodeType::SpecializedNode;
 	}
-	virtual bool run() override {
+	virtual NodeReturnType run() override {
 		_getch();
-		return (!playerAI->hasNotAttainedObjective());
+		bool ret = playerAI->hasNotAttainedObjective();
+		if (ret == false)
+			return NodeReturnType::Succes;
+		else
+			return NodeReturnType::Failure;
 	}
 };
 
@@ -106,9 +122,13 @@ public:
 		nodeName = "Task : choose direction in front of wall";
 		nodeType = NodeType::SpecializedNode;
 	}
-	virtual bool run() override {
+	virtual NodeReturnType run() override {
 		_getch();
-		return playerAI->turnForWall();
+		bool ret = playerAI->turnForWall();
+		if (ret == true)
+			return NodeReturnType::Succes;
+		else
+			return NodeReturnType::Failure;
 	}
 };
 
@@ -121,9 +141,9 @@ public:
 		nodeName = "Task : advance one square";
 		nodeType = NodeType::SpecializedNode;
 	}
-	virtual bool run() override {
+	virtual NodeReturnType run() override {
 		_getch();
 		playerAI->advance();
-		return true;
+		return NodeReturnType::Succes;
 	}
 };
