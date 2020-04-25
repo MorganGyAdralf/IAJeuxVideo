@@ -23,6 +23,7 @@ class Node {  // This class represents each node in the behaviour tree.
 public:
 	string nodeName = "Node Basique";
 	NodeType nodeType = NodeType::Node;
+	bool wasRunning = false;
 	virtual NodeReturnType run() = 0;
 	string getNodeName() {
 		return nodeName;

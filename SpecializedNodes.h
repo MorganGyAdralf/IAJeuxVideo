@@ -59,6 +59,7 @@ public:
 class AdvanceWhileNotBlockedTask : public Node {
 private:
 	Player* playerAI;
+	int tickCounter;
 
 public:
 	AdvanceWhileNotBlockedTask(Player* _playerAI) : playerAI(_playerAI) {
@@ -67,11 +68,20 @@ public:
 	}
 	virtual NodeReturnType run() override {
 		_getch();
-		while (playerAI->canAdvance().first && playerAI->hasNotAttainedObjective()) {
+		wasRunning = false;
+		tickCounter = 0;
+		while (playerAI->canAdvance().first && playerAI->hasNotAttainedObjective() && tickCounter < 3) {
 			_getch();
 			playerAI->advance();
+			++tickCounter;
 		}
-		return NodeReturnType::Succes;
+		if (tickCounter >= 3) {
+			wasRunning = true;
+			cout << "TASK:: pas eu le temps de finir avant la prochaine frame, task running" << endl;
+			return NodeReturnType::Running;
+		}
+		else
+			return NodeReturnType::Succes;
 	}
 };
 

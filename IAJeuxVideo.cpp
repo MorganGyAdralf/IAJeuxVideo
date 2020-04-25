@@ -7,11 +7,11 @@
 int main() {
 
     GameWorld* world = new GameWorld(15, 15);
-    cout << "monde cree" << endl;
+    cout << "MAIN:: monde cree" << endl;
     Player* ourPlayer = new Player(world);
-    cout << "joueur place" << endl;
+    cout << "MAIN:: joueur place" << endl;
     Tree behaviourTree = Tree(ourPlayer);
-    cout << "arbre cree" << endl;
+    cout << "MAIN:: arbre cree" << endl;
     system("pause");
     behaviourTree.Run();
     system("pause");
