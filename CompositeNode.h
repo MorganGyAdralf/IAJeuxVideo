@@ -6,7 +6,7 @@ private:
 	list<Node*> children_;
 
 public:
-	~CompositeNode() = default;
+	~CompositeNode();
 	const list<Node*>& getChildren() const;
 	void addChild(Node* p_child);
 };

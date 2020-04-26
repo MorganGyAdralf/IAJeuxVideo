@@ -7,7 +7,7 @@ Player::Player(GameWorld* p_world) : currentWorld_(p_world) {
 }
 
 Player::~Player() {
-	delete(currentWorld_);
+
 }
 
 bool Player::attackAMeleeTarget() const {	// Fonction qui vérifie si une cible est à côté du joueur et la détruit dans ce cas

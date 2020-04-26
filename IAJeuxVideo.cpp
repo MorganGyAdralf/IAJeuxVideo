@@ -3,19 +3,19 @@
 
 int main() {
 
-    GameWorld* world = new GameWorld(15, 15);
+    GameWorld* world = new GameWorld(15, 15);       // On règle la taille du monde de jeu ici, la largeur (x) d'abord, la hauteur (y) ensuite
     cout << "MAIN:: monde cree" << endl;
     Player* ourPlayer = new Player(world);
     cout << "MAIN:: joueur place" << endl;
-    Tree behaviourTree = Tree(ourPlayer);
+    Tree* behaviourTree = new Tree(ourPlayer);
     cout << "MAIN:: arbre cree" << endl;
     system("pause");
-    behaviourTree.run();
+    behaviourTree->run();
     system("pause");
 
-    /*behaviourTree.~Tree();
+    delete(world);
     delete(ourPlayer);
-    delete(world);*/
+    delete(behaviourTree);
 
     return 0;
 }

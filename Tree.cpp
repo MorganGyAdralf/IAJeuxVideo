@@ -36,7 +36,6 @@ Tree::Tree(Player* p_player) : treePlayer_(p_player) {
 }
 
 Tree::~Tree() {
-	delete(treePlayer_);
 	delete(root_);
 }
 

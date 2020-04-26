@@ -54,9 +54,7 @@ GameWorld::GameWorld(unsigned int p_w, unsigned int p_h) : width_(p_w), height_(
 }
 
 GameWorld::~GameWorld() {
-	graphicWorld_->~GraphicGridWorld();
 	delete(graphicWorld_);
-	worldWindow_->~RenderWindow();
 	delete(worldWindow_);
 	for (unsigned int t_x = 0; t_x < width_; t_x++)
 		gridWorld_[t_x].clear();

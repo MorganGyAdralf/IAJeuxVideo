@@ -19,9 +19,9 @@ private:
 	unsigned int height_;
 	unsigned int targetsDestroyed_ = 0;
 	unsigned int nbOfPlayers_ = 0;
-	const unsigned int nbOfWalls_ = 10;
-	const unsigned int nbOfTargets_ = 3;
-	const unsigned int nbOfTraps_ = 0;
+	const unsigned int nbOfWalls_ = 10;		// Paramètre pour régler le nombre de murs
+	const unsigned int nbOfTargets_ = 3;	// Paramètre pour régler le nombre de cibles
+	const unsigned int nbOfTraps_ = 0;		// Paramètre pour régler le nombre de pièges
 	vector<vector<SquareType>> gridWorld_;
 	GraphicGridWorld* graphicWorld_;
 	sf::RenderWindow* worldWindow_;
@@ -39,6 +39,5 @@ public:
 	void attackTarget(pair<unsigned int, unsigned int> p_playerPosition, Direction p_forward);
 	bool gameIsOngoing();
 	pair<unsigned int, unsigned int> findclosestTarget(pair<unsigned int, unsigned int> p_playerPosition) const;
-
 };
 

@@ -74,7 +74,8 @@ public:
 class AdvanceWhileNotBlockedTask : public Node {	// Tache qui fait avancer le joueur tant qu'il n'est pas bloqué ou n'a pas atteint sa cible
 private:
 	Player* playerAI_;
-	int tickCounter_;	// Compteur pour simuler le fait que la tache dure plus qu'une frame
+	unsigned int tickCounter_;	// Compteur pour simuler le fait que la tache dure plus qu'une frame
+	const unsigned int maxCounter_ = 3;	// Maximum de ticks avant que la boucle ne renvois Running
 
 public:
 	AdvanceWhileNotBlockedTask(Player* p_playerAI) : playerAI_(p_playerAI) {
@@ -90,12 +91,12 @@ public:
 		_getch();
 		wasRunning_ = false;
 		tickCounter_ = 0;
-		while (playerAI_->canAdvance().first && playerAI_->hasNotAttainedObjective() && tickCounter_ < 3) {
+		while (playerAI_->canAdvance().first && playerAI_->hasNotAttainedObjective() && tickCounter_ < maxCounter_) {
 			_getch();
 			playerAI_->advance();
 			++tickCounter_;
 		}
-		if (tickCounter_ >= 3) {
+		if (tickCounter_ >= maxCounter_) {
 			wasRunning_ = true;
 			cout << "TASK:: pas eu le temps de finir avant la prochaine frame, task running" << endl;
 			return NodeReturnType::Running;
