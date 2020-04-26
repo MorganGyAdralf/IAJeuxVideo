@@ -1,45 +1,48 @@
 #include "Tree.h"
 
-Tree::Tree(Player* player) : treePlayer(player) {
+Tree::Tree(Player* p_player) : treePlayer_(p_player) {
+	root_ = new Sequence;
+	Sequence* t_moveToTarget = new Sequence;
+	Sequence* t_dodgeWall = new Sequence;
 
-	root = new Sequence;
-	Sequence* moveToTarget = new Sequence;
-	Sequence* dodgeWall = new Sequence;
+	Selector* t_hitTarget = new Selector;
+	Selector* t_blocked = new Selector;
 
-	Selector* hitTarget = new Selector;
-	Selector* blocked = new Selector;
+	AttackTargetTask* t_attackTask = new AttackTargetTask(treePlayer_);
+	FindTargetTask* t_findTargetTask = new FindTargetTask(treePlayer_);
+	TurnTowardTargetTask* t_turnTowardTargetTask = new TurnTowardTargetTask(treePlayer_);
+	AdvanceWhileNotBlockedTask* t_advanceWhileNotBlockedTask = new AdvanceWhileNotBlockedTask(treePlayer_);
+	BlockedByTargetTask* t_blockedByTargetTask = new BlockedByTargetTask(treePlayer_);
+	AdvanceMaxAttainedTask* t_advcanceMaxAttainedTask = new AdvanceMaxAttainedTask(treePlayer_);
+	ChooseDirectionInFrontOfWallTask* t_chooseDirection = new ChooseDirectionInFrontOfWallTask(treePlayer_);
+	AdvanceOnlyOneSquareTask* t_advanceOnlyOneSquareTask = new AdvanceOnlyOneSquareTask(treePlayer_);
 
-	AttackTargetTask* attackTask = new AttackTargetTask(player);
-	FindTargetTask* findTargetTask = new FindTargetTask(player);
-	TurnTowardTargetTask* turnTowardTargetTask = new TurnTowardTargetTask(player);
-	AdvanceWhileNotBlockedTask* advanceWhileNotBlockedTask = new AdvanceWhileNotBlockedTask(player);
+	root_->addChild(t_hitTarget);
 
-	BlockedByTargetTask* blockedByTargetTask = new BlockedByTargetTask(player);
-	AdvcanceMaxAttainedTask* advcanceMaxAttainedTask = new AdvcanceMaxAttainedTask(player);
-	ChooseDirectionInFrontOfWallTask* chooseDirection = new ChooseDirectionInFrontOfWallTask(player);
-	AdvanceOnlyOneSquareTask* advanceOnlyOneSquareTask = new AdvanceOnlyOneSquareTask(player);
+	t_hitTarget->addChild(t_attackTask);
+	t_hitTarget->addChild(t_moveToTarget);
 
-	root->addChild(hitTarget);
+	t_moveToTarget->addChild(t_findTargetTask);
+	t_moveToTarget->addChild(t_turnTowardTargetTask);
+	t_moveToTarget->addChild(t_advanceWhileNotBlockedTask);
+	t_moveToTarget->addChild(t_blocked);
 
-	hitTarget->addChild(attackTask);
-	hitTarget->addChild(moveToTarget);
+	t_blocked->addChild(t_blockedByTargetTask);
+	t_blocked->addChild(t_advcanceMaxAttainedTask);
+	t_blocked->addChild(t_dodgeWall);
 
-	moveToTarget->addChild(findTargetTask);
-	moveToTarget->addChild(turnTowardTargetTask);
-	moveToTarget->addChild(advanceWhileNotBlockedTask);
-	moveToTarget->addChild(blocked);
-
-	blocked->addChild(blockedByTargetTask);
-	blocked->addChild(advcanceMaxAttainedTask);
-	blocked->addChild(dodgeWall);
-
-	dodgeWall->addChild(chooseDirection);
-	dodgeWall->addChild(advanceOnlyOneSquareTask);
+	t_dodgeWall->addChild(t_chooseDirection);
+	t_dodgeWall->addChild(t_advanceOnlyOneSquareTask);
 }
 
-void Tree::Run() {
-	while (treePlayer->gameIsOn()) {
-		cout << "-------- nouvelle passe ------------" << endl;
-		root->run();
+Tree::~Tree() {
+	delete(treePlayer_);
+	delete(root_);
+}
+
+void Tree::run() const {
+	while (treePlayer_->gameIsOn()) {
+		cout << "---------- nouvelle passe ----------" << endl;
+		root_->run();
 	}
 }

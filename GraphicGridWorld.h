@@ -3,20 +3,9 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
-enum SquareColor{
-	BLACK,
-	WHITE,
-	RED,
-	BLUE, 
-	GREEN
-};
+using namespace std;
 
-struct Square {
-	SquareColor color;
-	sf::RectangleShape square;
-};
-
-enum class SquareType {
+enum class SquareType {	// Une enum pour les différents types de cases
 	Empty,
 	Wall,
 	Target,
@@ -27,20 +16,14 @@ enum class SquareType {
 
 class GraphicGridWorld {
 private:
-	int m_rows;
-	int m_cols;
-	std::vector<Square> m_gridWorld;
-	float m_squarewidth;
-	float m_squareheight;
+	unsigned int rows_;
+	unsigned int columns_;
+	float squareWidth_;
+	float squareHeight_;
+	vector<sf::RectangleShape> gridWorld_;
 	
 public:
-	GraphicGridWorld();
-	GraphicGridWorld(int cols, int rows, sf::RenderWindow& window);
-	//GraphicGridWorld(int rows, int cols, sf::RenderWindow &window);
+	GraphicGridWorld(unsigned int p_cols, unsigned int p_rows, sf::RenderWindow* p_window);
 	~GraphicGridWorld();
-	void UpdateGridWorld(sf::RenderWindow &window, std::vector<std::vector<SquareType>> gridWorld);
-	sf::Vector2f GetCasePosition(int index);
-	float GetSquareSize();
-	int GetWorlheight();
-	int GetWorldSize();
+	void updateGridWorld(sf::RenderWindow* p_window, vector<vector<SquareType>> p_gridWorld);
 };

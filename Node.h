@@ -5,7 +5,7 @@
 
 using namespace std;
 
-enum class NodeType {
+enum class NodeType {	// Enum pour les types de Nodes, pour l'affichage de l'arbre
 	Node,
 	CompositeNode,
 	Selector,
@@ -19,16 +19,20 @@ enum class NodeReturnType {
 	Running
 };
 
-class Node {  // This class represents each node in the behaviour tree.
+class Node {
 public:
-	string nodeName = "Node Basique";
-	NodeType nodeType = NodeType::Node;
-	bool wasRunning = false;
+	string nodeName_ = "Node Basique";	// Nom de la Node, pour l'affichage de l'arbre
+	NodeType nodeType_ = NodeType::Node;
+	bool wasRunning_ = false;	// Boolean pour savoir si la node a retourné Running
+
+	~Node() = default;
 	virtual NodeReturnType run() = 0;
-	string getNodeName() {
-		return nodeName;
+
+	string getNodeName() const {
+		return nodeName_;
 	}
-	NodeType getNodeType() {
-		return nodeType;
+
+	NodeType getNodeType() const {
+		return nodeType_;
 	}
 };

@@ -3,27 +3,22 @@
 #include "GameWorld.h"
 
 class Player {
+private:
+	GameWorld* currentWorld_;
+	pair<int, int> playerPosition_;
+	pair<int, int> playerDestination_;
+	Direction playerLookingDirection_;
+
 public:
-	Player(GameWorld* world);
-	Direction getDirection() const {
-		return playerLookingDirection;
-	}
-	void setDirection(Direction newDirection) {
-		playerLookingDirection = newDirection;
-	}
-	bool attackAMeleeTarget();
+	Player(GameWorld* p_world);
+	~Player();
+	pair<bool, SquareType> canAdvance() const;
+	bool attackAMeleeTarget() const;
+	bool hasNotAttainedObjective() const;
+	bool gameIsOn() const;
 	bool findClosestTarget();
 	void turnTowardClosestTarget();
-	pair<bool, SquareType> canAdvance() const;
 	void advance();
 	bool turnForWall();
-	bool hasNotAttainedObjective();
-	bool gameIsOn();
-
-private:
-	GameWorld* currentWorld;
-	pair<int, int> playerPosition;
-	pair<int, int> playerDestination;
-	Direction playerLookingDirection;
 };
 

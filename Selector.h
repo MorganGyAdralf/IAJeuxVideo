@@ -4,22 +4,23 @@
 class Selector : public CompositeNode {
 public:
 	Selector() {
-		nodeName = "Selector";
-		nodeType = NodeType::Selector;
+		nodeName_ = "Selector";
+		nodeType_ = NodeType::Selector;
 	}
+
 	virtual NodeReturnType run() override {
-		for (Node* child : getChildren()) {  // The generic Selector implementation
-			if (!wasRunning || (wasRunning && child->wasRunning)) {
-				wasRunning = false;
+		for (Node* child : getChildren()) {
+			if (!wasRunning_ || (wasRunning_ && child->wasRunning_)) {	// Condition pour pouvoir reprendre à partir de l'enfant en Running s'il y en avait un
+				wasRunning_ = false;
 				NodeReturnType ret = child->run();
-				if (ret == NodeReturnType::Succes)  // If one child succeeds, the entire operation run() succeeds.  Failure only results if all children fail.
+				if (ret == NodeReturnType::Succes)
 					return NodeReturnType::Succes;
 				else if (ret == NodeReturnType::Running) {
-					wasRunning = true;
+					wasRunning_ = true;
 					return NodeReturnType::Running;
 				}
 			}
 		}
-		return NodeReturnType::Failure;  // All children failed so the entire run() operation fails.
+		return NodeReturnType::Failure;
 	}
 };

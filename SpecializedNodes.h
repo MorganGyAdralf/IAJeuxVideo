@@ -2,81 +2,101 @@
 #include "Node.h"
 #include "Player.h"
 
-class AttackTargetTask : public Node {
+class AttackTargetTask : public Node {	// Tache qui essaye d'attaquer les quatres cases autour du joueur
 private:
-	Player* playerAI;
+	Player* playerAI_;
 
 public:
-	AttackTargetTask(Player* _playerAI) : playerAI(_playerAI) {
-		nodeName = "Task : attack target";
-		nodeType = NodeType::SpecializedNode;
+	AttackTargetTask(Player* p_playerAI) : playerAI_(p_playerAI) {
+		nodeName_ = "Task : attack target";
+		nodeType_ = NodeType::SpecializedNode;
 	}
+
+	~AttackTargetTask() {
+		delete(playerAI_);
+	}
+
 	virtual NodeReturnType run() override {
 		_getch();
-		bool ret = playerAI->attackAMeleeTarget();
-		if (ret == true)
+		bool t_ret = playerAI_->attackAMeleeTarget();
+		if (t_ret == true)
 			return NodeReturnType::Succes;
 		else
 			return NodeReturnType::Failure;
 	}
 };
 
-class FindTargetTask : public Node {
+class FindTargetTask : public Node {	// Tache qui essaye de trouver la cible la plus proche
 private:
-	Player* playerAI;
+	Player* playerAI_;
 
 public:
-	FindTargetTask(Player* _playerAI) : playerAI(_playerAI) {
-		nodeName = "Task : find target";
-		nodeType = NodeType::SpecializedNode;
+	FindTargetTask(Player* p_playerAI) : playerAI_(p_playerAI) {
+		nodeName_ = "Task : find target";
+		nodeType_ = NodeType::SpecializedNode;
 	}
+
+	~FindTargetTask() {
+		delete(playerAI_);
+	}
+
 	virtual NodeReturnType run() override {
 		_getch();
-		bool ret = playerAI->findClosestTarget();
-		if (ret == true)
+		bool t_ret = playerAI_->findClosestTarget();
+		if (t_ret == true)
 			return NodeReturnType::Succes;
 		else
 			return NodeReturnType::Failure;
 	}
 };
 
-class TurnTowardTargetTask : public Node {
+class TurnTowardTargetTask : public Node {	// Tache qui tourne le joueur dans la direction de sa cible
 private:
-	Player* playerAI;
+	Player* playerAI_;
 
 public:
-	TurnTowardTargetTask(Player* _playerAI) : playerAI(_playerAI) {
-		nodeName = "Task : turn toward target";
-		nodeType = NodeType::SpecializedNode;
+	TurnTowardTargetTask(Player* p_playerAI) : playerAI_(p_playerAI) {
+		nodeName_ = "Task : turn toward target";
+		nodeType_ = NodeType::SpecializedNode;
 	}
+
+	~TurnTowardTargetTask() {
+		delete(playerAI_);
+	}
+
 	virtual NodeReturnType run() override {
 		_getch();
-		playerAI->turnTowardClosestTarget();
+		playerAI_->turnTowardClosestTarget();
 		return NodeReturnType::Succes;
 	}
 };
 
-class AdvanceWhileNotBlockedTask : public Node {
+class AdvanceWhileNotBlockedTask : public Node {	// Tache qui fait avancer le joueur tant qu'il n'est pas bloqué ou n'a pas atteint sa cible
 private:
-	Player* playerAI;
-	int tickCounter;
+	Player* playerAI_;
+	int tickCounter_;	// Compteur pour simuler le fait que la tache dure plus qu'une frame
 
 public:
-	AdvanceWhileNotBlockedTask(Player* _playerAI) : playerAI(_playerAI) {
-		nodeName = "Task : advance while not blocked";
-		nodeType = NodeType::SpecializedNode;
+	AdvanceWhileNotBlockedTask(Player* p_playerAI) : playerAI_(p_playerAI) {
+		nodeName_ = "Task : advance while not blocked";
+		nodeType_ = NodeType::SpecializedNode;
 	}
+
+	~AdvanceWhileNotBlockedTask() {
+		delete(playerAI_);
+	}
+
 	virtual NodeReturnType run() override {
 		_getch();
-		wasRunning = false;
-		tickCounter = 0;
-		while (playerAI->canAdvance().first && playerAI->hasNotAttainedObjective() && tickCounter < 3) {
+		wasRunning_ = false;
+		tickCounter_ = 0;
+		while (playerAI_->canAdvance().first && playerAI_->hasNotAttainedObjective() && tickCounter_ < 3) {
 			_getch();
-			playerAI->advance();
-			++tickCounter;
+			playerAI_->advance();
+			++tickCounter_;
 		}
-		if (tickCounter >= 3) {
-			wasRunning = true;
+		if (tickCounter_ >= 3) {
+			wasRunning_ = true;
 			cout << "TASK:: pas eu le temps de finir avant la prochaine frame, task running" << endl;
 			return NodeReturnType::Running;
 		}
@@ -85,75 +105,95 @@ public:
 	}
 };
 
-class BlockedByTargetTask : public Node {
+class BlockedByTargetTask : public Node {	// Tache qui regarde si le joueur est bloqué par une cible
 private:
-	Player* playerAI;
+	Player* playerAI_;
 
 public:
-	BlockedByTargetTask(Player* _playerAI) : playerAI(_playerAI) {
-		nodeName = "Task : blocked by target?";
-		nodeType = NodeType::SpecializedNode;
+	BlockedByTargetTask(Player* p_playerAI) : playerAI_(p_playerAI) {
+		nodeName_ = "Task : blocked by target?";
+		nodeType_ = NodeType::SpecializedNode;
 	}
+
+	~BlockedByTargetTask() {
+		delete(playerAI_);
+	}
+
 	virtual NodeReturnType run() override {
 		_getch();
-		bool ret = (playerAI->canAdvance().second == SquareType::Target);
-		if (ret == true)
+		bool t_ret = (playerAI_->canAdvance().second == SquareType::Target);
+		if (t_ret == true)
 			return NodeReturnType::Succes;
 		else
 			return NodeReturnType::Failure;
 	}
 };
 
-class AdvcanceMaxAttainedTask : public Node {
+class AdvanceMaxAttainedTask : public Node {	// Tache qui vérifie si le joueur est bloqué car il a atteint son objectif
 private:
-	Player* playerAI;
+	Player* playerAI_;
 
 public:
-	AdvcanceMaxAttainedTask(Player* _playerAI) : playerAI(_playerAI) {
-		nodeName = "Task : AdvanceAttained?";
-		nodeType = NodeType::SpecializedNode;
+	AdvanceMaxAttainedTask(Player* p_playerAI) : playerAI_(p_playerAI) {
+		nodeName_ = "Task : AdvanceAttained?";
+		nodeType_ = NodeType::SpecializedNode;
 	}
+
+	~AdvanceMaxAttainedTask() {
+		delete(playerAI_);
+	}
+
 	virtual NodeReturnType run() override {
 		_getch();
-		bool ret = playerAI->hasNotAttainedObjective();
-		if (ret == false)
+		bool t_ret = playerAI_->hasNotAttainedObjective();
+		if (t_ret == false)
 			return NodeReturnType::Succes;
 		else
 			return NodeReturnType::Failure;
 	}
 };
 
-class ChooseDirectionInFrontOfWallTask : public Node {
+class ChooseDirectionInFrontOfWallTask : public Node {	// Tache qui essaye de changer la direction du joueur face à un mur
 private:
-	Player* playerAI;
+	Player* playerAI_;
 
 public:
-	ChooseDirectionInFrontOfWallTask(Player* _playerAI) : playerAI(_playerAI) {
-		nodeName = "Task : choose direction in front of wall";
-		nodeType = NodeType::SpecializedNode;
+	ChooseDirectionInFrontOfWallTask(Player* p_playerAI) : playerAI_(p_playerAI) {
+		nodeName_ = "Task : choose direction in front of wall";
+		nodeType_ = NodeType::SpecializedNode;
 	}
+
+	~ChooseDirectionInFrontOfWallTask() {
+		delete(playerAI_);
+	}
+
 	virtual NodeReturnType run() override {
 		_getch();
-		bool ret = playerAI->turnForWall();
-		if (ret == true)
+		bool t_ret = playerAI_->turnForWall();
+		if (t_ret == true)
 			return NodeReturnType::Succes;
 		else
 			return NodeReturnType::Failure;
 	}
 };
 
-class AdvanceOnlyOneSquareTask : public Node {
+class AdvanceOnlyOneSquareTask : public Node {	// Tache qui avance d'une seule case, pour contourner un mur
 private:
-	Player* playerAI;
+	Player* playerAI_;
 
 public:
-	AdvanceOnlyOneSquareTask(Player* _playerAI) : playerAI(_playerAI) {
-		nodeName = "Task : advance one square";
-		nodeType = NodeType::SpecializedNode;
+	AdvanceOnlyOneSquareTask(Player* p_playerAI) : playerAI_(p_playerAI) {
+		nodeName_ = "Task : advance one square";
+		nodeType_ = NodeType::SpecializedNode;
 	}
+
+	~AdvanceOnlyOneSquareTask() {
+		delete(playerAI_);
+	}
+
 	virtual NodeReturnType run() override {
 		_getch();
-		playerAI->advance();
+		playerAI_->advance();
 		return NodeReturnType::Succes;
 	}
 };

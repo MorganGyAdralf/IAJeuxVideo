@@ -161,7 +161,6 @@
   <ItemGroup>
     <ClCompile Include="CompositeNode.cpp" />
     <ClCompile Include="GameWorld.cpp" />
-    <ClCompile Include="GraphicAgent.cpp" />
     <ClCompile Include="GraphicGridWorld.cpp" />
     <ClCompile Include="IAJeuxVideo.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -178,7 +177,6 @@
     <ClInclude Include="Tree.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GraphicAgent.h" />
     <ClInclude Include="GraphicGridWorld.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

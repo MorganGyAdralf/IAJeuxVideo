@@ -30,9 +30,6 @@
     <ClCompile Include="GraphicGridWorld.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="GraphicAgent.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="Tree.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -60,9 +57,6 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="GraphicGridWorld.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphicAgent.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Tree.h">

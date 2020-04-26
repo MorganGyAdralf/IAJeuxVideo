@@ -1,8 +1,5 @@
-// IAJeuxVideo.cpp : Ce fichier contient la fonction 'main'. L'exécution du programme commence et se termine à cet endroit.
 #pragma once
-#include <iostream>
 #include "Tree.h"
-
 
 int main() {
 
@@ -13,8 +10,12 @@ int main() {
     Tree behaviourTree = Tree(ourPlayer);
     cout << "MAIN:: arbre cree" << endl;
     system("pause");
-    behaviourTree.Run();
+    behaviourTree.run();
     system("pause");
+
+    /*behaviourTree.~Tree();
+    delete(ourPlayer);
+    delete(world);*/
 
     return 0;
 }

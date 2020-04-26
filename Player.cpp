@@ -1,29 +1,33 @@
 #include "Player.h"
 
-Player::Player(GameWorld* world) : currentWorld(world) {
-	playerPosition = currentWorld->spawnPlayer();
-	playerDestination = playerPosition;
-	playerLookingDirection = Direction::North;
+Player::Player(GameWorld* p_world) : currentWorld_(p_world) {
+	playerPosition_ = currentWorld_->spawnPlayer();
+	playerDestination_ = playerPosition_;
+	playerLookingDirection_ = Direction::North;
 }
 
-bool Player::attackAMeleeTarget() {
-	if (currentWorld->playerCanAdvance(playerPosition, Direction::East).second == SquareType::Target) {
-		currentWorld->attackTarget(playerPosition, Direction::East);
+Player::~Player() {
+	delete(currentWorld_);
+}
+
+bool Player::attackAMeleeTarget() const {	// Fonction qui vérifie si une cible est à côté du joueur et la détruit dans ce cas
+	if (currentWorld_->playerCanAdvance(playerPosition_, Direction::East).second == SquareType::Target) {
+		currentWorld_->attackTarget(playerPosition_, Direction::East);
 		cout << "PLAYER:: j'ai attaque a l'est" << endl;
 		return true;
 	}
-	else if (currentWorld->playerCanAdvance(playerPosition, Direction::North).second == SquareType::Target) {
-		currentWorld->attackTarget(playerPosition, Direction::North);
+	else if (currentWorld_->playerCanAdvance(playerPosition_, Direction::North).second == SquareType::Target) {
+		currentWorld_->attackTarget(playerPosition_, Direction::North);
 		cout << "PLAYER:: j'ai attaque au nord" << endl;
 		return true;
 	}
-	else if (currentWorld->playerCanAdvance(playerPosition, Direction::South).second == SquareType::Target) {
-		currentWorld->attackTarget(playerPosition, Direction::South);
+	else if (currentWorld_->playerCanAdvance(playerPosition_, Direction::South).second == SquareType::Target) {
+		currentWorld_->attackTarget(playerPosition_, Direction::South);
 		cout << "PLAYER:: j'ai attaque au sud" << endl;
 		return true;
 	}
-	else if (currentWorld->playerCanAdvance(playerPosition, Direction::West).second == SquareType::Target) {
-		currentWorld->attackTarget(playerPosition, Direction::West);
+	else if (currentWorld_->playerCanAdvance(playerPosition_, Direction::West).second == SquareType::Target) {
+		currentWorld_->attackTarget(playerPosition_, Direction::West);
 		cout << "PLAYER:: j'ai attaque a l'ouest" << endl;
 		return true;
 	}
@@ -33,58 +37,58 @@ bool Player::attackAMeleeTarget() {
 	}
 }
 
-bool Player::findClosestTarget() {
-	playerDestination = currentWorld->findclosestTarget(playerPosition);
-	if (playerDestination == playerPosition) {
+bool Player::findClosestTarget() {	// Fonction qui tente de trouver la cible la plus proche, et la prends comme destination
+	playerDestination_ = currentWorld_->findclosestTarget(playerPosition_);
+	if (playerDestination_ == playerPosition_) {
 		cout << "PLAYER:: pas de cible trouvee" << endl;
 		return false;
 	}
-	cout << "PLAYER:: cible trouvee en " << playerDestination.first << " " << playerDestination .second << endl;
+	cout << "PLAYER:: cible trouvee en " << playerDestination_.first << " " << playerDestination_ .second << endl;
 	return true;
 }
 
-void Player::turnTowardClosestTarget() {
-	int xDist = playerDestination.first - playerPosition.first;
-	int yDist = playerDestination.second - playerPosition.second;
-	if (abs(xDist) >= abs(yDist)) {
-		if (xDist > 0) {
-			playerLookingDirection = Direction::East;
+void Player::turnTowardClosestTarget() {	// Fonction qui tourne le joueur dans la direction de sa cible
+	int t_xDist = playerDestination_.first - playerPosition_.first;
+	int t_yDist = playerDestination_.second - playerPosition_.second;
+	if (abs(t_xDist) >= abs(t_yDist)) {
+		if (t_xDist > 0) {
+			playerLookingDirection_ = Direction::East;
 			cout << "PLAYER:: je me tourne vers l'est" << endl;
 		}
 		else {
-			playerLookingDirection = Direction::West;
+			playerLookingDirection_ = Direction::West;
 			cout << "PLAYER:: je me tourne vers l'ouest" << endl;
 		}
 	}
 	else {
-		if (yDist > 0) {
-			playerLookingDirection = Direction::North;
+		if (t_yDist > 0) {
+			playerLookingDirection_ = Direction::North;
 			cout << "PLAYER:: je me tourne vers le nord" << endl;
 		}
 		else {
-			playerLookingDirection = Direction::South;
+			playerLookingDirection_ = Direction::South;
 			cout << "PLAYER:: je me tourne vers le sud" << endl;
 		}
 	}
 }
 
-pair<bool, SquareType> Player::canAdvance() const {
-	return currentWorld->playerCanAdvance(playerPosition, playerLookingDirection);
+pair<bool, SquareType> Player::canAdvance() const {	// Fonction qui vérifie si le joueur peut avancer
+	return currentWorld_->playerCanAdvance(playerPosition_, playerLookingDirection_);
 }
 
-void Player::advance() {
-	playerPosition = currentWorld->advancePlayer(playerPosition, playerLookingDirection);
+void Player::advance() {	// Fonction qui avance le joueur d'une case dans la direction vers laquelle il est tourné
+	playerPosition_ = currentWorld_->advancePlayer(playerPosition_, playerLookingDirection_);
 	cout << "PLAYER:: j'ai avance d'une case" << endl;
 }
 
-bool Player::turnForWall() {
-	if (playerLookingDirection == Direction::East || playerLookingDirection == Direction::West) {
-		if (currentWorld->playerCanAdvance(playerPosition, Direction::North).first) {
-			playerLookingDirection = Direction::North;
+bool Player::turnForWall() {	// Fonction qui tourne le joueur pour qu'il évite un mur
+	if (playerLookingDirection_ == Direction::East || playerLookingDirection_ == Direction::West) {
+		if (currentWorld_->playerCanAdvance(playerPosition_, Direction::North).first) {
+			playerLookingDirection_ = Direction::North;
 			cout << "PLAYER:: je me tourne vers le nord" << endl;
 		}
-		else if (currentWorld->playerCanAdvance(playerPosition, Direction::South).first) {
-			playerLookingDirection = Direction::South;
+		else if (currentWorld_->playerCanAdvance(playerPosition_, Direction::South).first) {
+			playerLookingDirection_ = Direction::South;
 			cout << "PLAYER:: je me tourne vers le sud" << endl;
 		}
 		else {
@@ -93,12 +97,12 @@ bool Player::turnForWall() {
 		}
 	}
 	else {
-		if (currentWorld->playerCanAdvance(playerPosition, Direction::East).first) {
-			playerLookingDirection = Direction::East;
+		if (currentWorld_->playerCanAdvance(playerPosition_, Direction::East).first) {
+			playerLookingDirection_ = Direction::East;
 			cout << "PLAYER:: je me tourne vers l'est" << endl;
 		}
-		else if (currentWorld->playerCanAdvance(playerPosition, Direction::West).first) {
-			playerLookingDirection = Direction::West;
+		else if (currentWorld_->playerCanAdvance(playerPosition_, Direction::West).first) {
+			playerLookingDirection_ = Direction::West;
 			cout << "PLAYER:: je me tourne vers l'ouest" << endl;
 		}
 		else {
@@ -109,16 +113,16 @@ bool Player::turnForWall() {
 	return true;
 }
 
-bool Player::hasNotAttainedObjective() {
-	int distRest;
-	if (playerLookingDirection == Direction::East || playerLookingDirection == Direction::West)
-		distRest = abs(playerDestination.first - playerPosition.first);
+bool Player::hasNotAttainedObjective() const {	// Fonction qui vérifie si le joueur a atteint son objectif, c'est-à-dire s'il est à la "verticale" de sa cible
+	int t_distRest;
+	if (playerLookingDirection_ == Direction::East || playerLookingDirection_ == Direction::West)
+		t_distRest = abs(playerDestination_.first - playerPosition_.first);
 	else
-		distRest = abs(playerDestination.second - playerPosition.second);
-	cout << "PLAYER:: distance restante a l'objectif : " << distRest << endl;
-	return (distRest > 0);
+		t_distRest = abs(playerDestination_.second - playerPosition_.second);
+	cout << "PLAYER:: distance restante a l'objectif : " << t_distRest << endl;
+	return (t_distRest > 0);
 }
 
-bool Player::gameIsOn() {
-	return currentWorld->gameOngoing();
+bool Player::gameIsOn() const {	// Fonction qui regarde si le jeu continue
+	return currentWorld_->gameIsOngoing();
 }
